@@ -98,7 +98,9 @@
   <ItemGroup>
     <Compile Include="ReadBack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Writer.cs" />
+    <Compile Include="Saver.cs" />
+    <Compile Include="WriterParallel.cs" />
+    <Compile Include="WriterAsync.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
