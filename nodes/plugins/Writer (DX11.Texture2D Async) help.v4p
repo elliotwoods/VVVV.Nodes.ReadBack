@@ -323,9 +323,9 @@
    </BOUNDS>
    <PIN pinname="Switch" visible="1">
    </PIN>
-   <PIN pinname="Input 1" slicecount="1" values="SUCCESS">
+   <PIN pinname="Input 1" slicecount="1" values="FAIL">
    </PIN>
-   <PIN pinname="Input 2" slicecount="1" values="FAIL">
+   <PIN pinname="Input 2" slicecount="1" values="SUCCESS">
    </PIN>
    <PIN pinname="Output" visible="1">
    </PIN>

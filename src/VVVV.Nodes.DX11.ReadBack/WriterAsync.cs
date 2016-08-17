@@ -184,7 +184,7 @@ namespace VVVV.Nodes.DX11.ReadBack
 					{
 						FOutTag.Add(saver.Tag);
 						FOutStatus.Add(saver.Status);
-						FOutSuccess.Add(!saver.Success);
+						FOutSuccess.Add(saver.Success);
 					}
 				}
 			}

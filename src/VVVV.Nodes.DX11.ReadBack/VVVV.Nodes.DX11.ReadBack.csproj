@@ -34,16 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FeralTic">
-      <HintPath>..\..\..\dx11-vvvv\Deploy\Debug\x64\packs\dx11\core\FeralTic.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>..\..\..\dx11-vvvv\Deploy\Debug\x64\packs\dx11\core\SharpDX.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\..\..\dx11-vvvv\Deploy\Debug\x64\packs\dx11\core\SharpDX.DXGI.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\dx11\core\FeralTic.dll</HintPath>
     </Reference>
     <Reference Include="SlimDX">
       <HintPath>..\..\..\dx11-vvvv\Dependencies\x64\SlimDX.dll</HintPath>
@@ -82,16 +73,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="VVVV.DX11.Core">
-      <HintPath>..\..\..\dx11-vvvv\Deploy\Debug\x64\packs\dx11\core\VVVV.DX11.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="VVVV.DX11.Lib">
-      <HintPath>..\..\..\dx11-vvvv\Deploy\Debug\x64\packs\dx11\core\VVVV.DX11.Lib.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\dx11\core\VVVV.DX11.Core.dll</HintPath>
     </Reference>
     <Reference Include="VVVV.DX11.Nodes">
-      <HintPath>..\..\..\dx11-vvvv\Deploy\Debug\x64\packs\dx11\nodes\plugins\VVVV.DX11.Nodes.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\..\dx11\nodes\plugins\VVVV.DX11.Nodes.dll</HintPath>
     </Reference>
     <Reference Include="VVVV.PluginInterfaces">
       <HintPath>packages\VVVV.PluginInterfaces.34.2.0\build\net40\lib\x64\VVVV.PluginInterfaces.dll</HintPath>
