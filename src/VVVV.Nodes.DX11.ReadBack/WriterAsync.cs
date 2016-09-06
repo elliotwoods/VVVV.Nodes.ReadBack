@@ -82,11 +82,17 @@ namespace VVVV.Nodes.DX11.ReadBack
 		[Input("Tag")]
 		ISpread<string> FInTag;
 
+		[Input("Max Saver Count", DefaultValue = 8, IsSingle = true)]
+		ISpread<int> FInMaxSavers;
+
 		[Input("Write")]
 		ISpread<bool> FInWrite;
 
 		[Output("Tag")]
 		ISpread<string> FOutTag;
+
+		[Output("Queue Size")]
+		ISpread<int> FOutQueueSize;
 
 		[Output("Status")]
 		ISpread<string> FOutStatus;
@@ -112,6 +118,38 @@ namespace VVVV.Nodes.DX11.ReadBack
 		[ImportingConstructor()]
 		public WriterAsync(IPluginHost host)
 		{
+		}
+
+		public int QueueSize
+		{
+			get
+			{
+				int queueSize = 0;
+				foreach(var saver in FSavers)
+				{
+					if(!saver.Completed)
+					{
+						queueSize++;
+					}
+				}
+				return queueSize;
+			}
+		}
+
+		void TrimSavers()
+		{
+			foreach (var saver in FSavers)
+			{
+				if (saver.Completed)
+				{
+					saver.FramesUntilDead--;
+					if (saver.FramesUntilDead < 0)
+					{
+						saver.Dispose();
+					}
+				}
+			}
+			FSavers.RemoveAll(saver => saver.FramesUntilDead < 0);
 		}
 
 		public void Evaluate(int SpreadMax)
@@ -145,21 +183,31 @@ namespace VVVV.Nodes.DX11.ReadBack
 					try
 					{
 						SaverAsync saver = null;
-						
-						//attempt to recycle an existing saver
-						foreach(var existingSaver in FSavers)
-						{
-							if(existingSaver.IsAvailable(AssignedContext.Device.ImmediateContext, FInTexture[i][AssignedContext].Description))
-							{
-								saver = existingSaver;
-								break;
-							}
-						}
 
-						//make a saver if none available
-						if(saver == null)
+						while (saver == null)
 						{
-							saver = new SaverAsync();
+							//attempt to recycle an existing saver
+							foreach (var existingSaver in FSavers)
+							{
+								if (existingSaver.IsAvailable(AssignedContext.Device.ImmediateContext, FInTexture[i][AssignedContext].Description))
+								{
+									saver = existingSaver;
+									break;
+								}
+							}
+
+							//make a saver if none available (only if we haven't exceeded max count)
+							if (saver == null && FSavers.Count < FInMaxSavers[0])
+							{
+								saver = new SaverAsync();
+							}
+
+							if(saver == null)
+							{
+								//kill off expired savers (e.g. on other devices that we can't use)
+								//TrimSavers();
+								Thread.Sleep(1);
+							}
 						}
 
 						saver.Tag = FInTag[i];
@@ -190,20 +238,9 @@ namespace VVVV.Nodes.DX11.ReadBack
 			}
 
 			//delete expired zombies
-			{
-				foreach(var saver in FSavers)
-				{
-					if(saver.Completed)
-					{
-						saver.FramesUntilDead--;
-						if (saver.FramesUntilDead < 0)
-						{
-							saver.Dispose();
-						}
-					}
-				}
-				FSavers.RemoveAll(saver => saver.FramesUntilDead < 0);
-			}
+			//TrimSavers();
+
+			FOutQueueSize[0] = this.QueueSize;
 		}
 
 		public FeralTic.DX11.DX11RenderContext AssignedContext
