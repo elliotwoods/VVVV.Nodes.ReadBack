@@ -27,17 +27,18 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\nodes\plugins\</OutputPath>
+    <OutputPath>..\..\nodes\plugins\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FeralTic">
-      <HintPath>..\..\..\vvvv_45beta34.2_x64\packs\dx11\core\FeralTic.dll</HintPath>
+      <HintPath>..\..\..\dx11\core\FeralTic.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="SlimDX">
-      <HintPath>..\..\..\vvvv_45beta34.2_x64\lib\core\SlimDX.dll</HintPath>
+      <HintPath>..\..\..\..\lib\core\SlimDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition.CodePlex, Version=4.1.2.0, Culture=neutral, PublicKeyToken=13e5ffd4e05db186, processorArchitecture=MSIL">
@@ -48,19 +49,19 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -73,13 +74,16 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="VVVV.DX11.Core">
-      <HintPath>..\..\..\vvvv_45beta34.2_x64\packs\dx11\core\VVVV.DX11.Core.dll</HintPath>
+      <HintPath>..\..\..\dx11\core\VVVV.DX11.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="VVVV.DX11.Lib">
-      <HintPath>..\..\..\vvvv_45beta34.2_x64\packs\dx11\core\VVVV.DX11.Lib.dll</HintPath>
+      <HintPath>..\..\..\dx11\core\VVVV.DX11.Lib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="VVVV.DX11.Nodes">
-      <HintPath>..\..\..\vvvv_45beta34.2_x64\packs\dx11\nodes\plugins\VVVV.DX11.Nodes.dll</HintPath>
+      <HintPath>..\..\..\dx11\nodes\plugins\VVVV.DX11.Nodes.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="VVVV.PluginInterfaces">
       <HintPath>packages\VVVV.PluginInterfaces.34.2.0\build\net40\lib\x64\VVVV.PluginInterfaces.dll</HintPath>

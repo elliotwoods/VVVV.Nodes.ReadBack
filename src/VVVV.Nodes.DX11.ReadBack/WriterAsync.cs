@@ -43,18 +43,28 @@ namespace VVVV.Nodes.DX11.ReadBack
 	{
 		class SaverAsync : Saver
 		{
+			public static int DefaultZombieSurvivalAge = 2;
+
+			int FZombieSurvivalAge = DefaultZombieSurvivalAge;
 			/// <summary>
 			/// For Async Writers, this is the number of frames a completed saver will stay alive for allowing it to be recycled
 			/// </summary>
-			public static int ZombieSurvivalAge
-			{
+			public int ZombieSurvivalAge {
 				get
 				{
-					return 2;
+					return FZombieSurvivalAge;
+				}
+				set
+				{
+					if(this.FramesUntilDead == this.ZombieSurvivalAge)
+					{
+						this.FramesUntilDead = value;
+					}
+					this.ZombieSurvivalAge = value;
 				}
 			}
 
-			public int FramesUntilDead = ZombieSurvivalAge;
+			public int FramesUntilDead = DefaultZombieSurvivalAge;
 
 			public string Tag;
 
@@ -65,6 +75,12 @@ namespace VVVV.Nodes.DX11.ReadBack
 					return false;
 				}
 				return this.FAssets.RenderDeviceContext == Context && this.FAssets.Description == Description;
+			}
+
+			public override void Recycle()
+			{
+				FramesUntilDead = ZombieSurvivalAge;
+				base.Recycle();
 			}
 		}
 		
@@ -88,17 +104,23 @@ namespace VVVV.Nodes.DX11.ReadBack
 		[Input("Write")]
 		ISpread<bool> FInWrite;
 
+		[Input("Zombie Survival Age", DefaultValue = 2, IsSingle = true)]
+		ISpread<int> FConfigZombieSurvivalAge;
+
+		[Output("Filename")]
+		ISpread<string> FOutFilename;
+
 		[Output("Tag")]
 		ISpread<string> FOutTag;
 
-		[Output("Queue Size")]
-		ISpread<int> FOutQueueSize;
+		[Output("Success")]
+		ISpread<bool> FOutSuccess;
 
 		[Output("Status")]
 		ISpread<string> FOutStatus;
 
-		[Output("Success")]
-		ISpread<bool> FOutSuccess;
+		[Output("Queue Size")]
+		ISpread<int> FOutQueueSize;
 
 		[Import()]
 		protected IPluginHost FHost;
@@ -171,6 +193,7 @@ namespace VVVV.Nodes.DX11.ReadBack
 				return;
 			}
 
+			FOutFilename.SliceCount = 0;
 			FOutTag.SliceCount = 0;
 			FOutStatus.SliceCount = 0;
 			FOutSuccess.SliceCount = 0;
@@ -200,20 +223,20 @@ namespace VVVV.Nodes.DX11.ReadBack
 							if (saver == null && FSavers.Count < FInMaxSavers[0])
 							{
 								saver = new SaverAsync();
+								saver.ZombieSurvivalAge = FConfigZombieSurvivalAge[0];
+								FSavers.Add(saver);
 							}
 
 							if(saver == null)
 							{
 								//kill off expired savers (e.g. on other devices that we can't use)
-								//TrimSavers();
+								TrimSavers();
 								Thread.Sleep(1);
 							}
 						}
 
 						saver.Tag = FInTag[i];
 						saver.Save(AssignedContext.Adapter, FInTexture[i][AssignedContext], FInFilename[i], FInFormat[i]);
-
-						FSavers.Add(saver);
 					}
 					catch (Exception e)
 					{
@@ -230,6 +253,7 @@ namespace VVVV.Nodes.DX11.ReadBack
 				{
 					if(saver.CompletedBang)
 					{
+						FOutFilename.Add(saver.Filename);
 						FOutTag.Add(saver.Tag);
 						FOutStatus.Add(saver.Status);
 						FOutSuccess.Add(saver.Success);

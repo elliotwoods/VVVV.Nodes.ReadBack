@@ -60,6 +60,27 @@ namespace VVVV.Nodes.DX11.ReadBack
 			}
 		}
 
+		string FFilename = "";
+		public string Filename
+		{
+			get
+			{
+				string copy;
+				lock (FFilename)
+				{
+					copy = FFilename;
+				}
+				return copy;
+			}
+			set
+			{
+				lock (FFilename)
+				{
+					FFilename = value;
+				}
+			}
+		}
+
 		protected class Assets : IDisposable
 		{
 			public DeviceContext RenderDeviceContext = null;
@@ -117,8 +138,31 @@ namespace VVVV.Nodes.DX11.ReadBack
 		{
 		}
 
+		public virtual void Recycle()
+		{
+			this.Success = false;
+			this.Completed = false;
+			this.FCompletedBang = false;
+			lock (FStatus)
+			{
+				this.FStatus = "";
+			}
+			lock(FFilename)
+			{
+				this.FFilename = "";
+			}
+		}
+
 		public void Save(SlimDX.DXGI.Adapter adapter, DX11Texture2D texture, string filename, ImageFileFormat format)
 		{
+			//If we're being re-used, called recycle
+			if(this.Completed)
+			{
+				this.Recycle();
+			}
+
+			FFilename = filename;
+
 			try
 			{
 				//log the render device context
